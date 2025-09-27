@@ -98,7 +98,7 @@ const Features = ({ onChatClick }: FeaturesProps) => {
                         Record Vlog
                       </Text>
                       <Text fontSize="sm" opacity={0.8}>
-                        Share your cosmic journey
+                        Share your daily life
                       </Text>
                     </Box>
                   </HStack>
@@ -113,7 +113,7 @@ const Features = ({ onChatClick }: FeaturesProps) => {
               </Button>
             </MotionBox>
 
-            {/* Start Meditation Button */}
+            {/* Start Meditation Button
             <MotionBox w="full">
               <Button
                 as={MotionButton}
@@ -173,7 +173,7 @@ const Features = ({ onChatClick }: FeaturesProps) => {
                   />
                 </HStack>
               </Button>
-            </MotionBox>
+            </MotionBox> */}
 
             {/* Chat with Maitri Card */}
             <MotionBox
@@ -242,12 +242,13 @@ const Features = ({ onChatClick }: FeaturesProps) => {
                   fontWeight="600"
                   onClick={onChatClick}
                   boxShadow="nebula"
+                  padding={4}
                   _hover={{
                     boxShadow: '0 0 30px rgba(255, 159, 74, 0.6)',
                     transform: 'translateY(-2px)'
                   }}
                 >
-                  Start Cosmic Chat
+                  Chat
                 </Button>
               </VStack>
             </MotionBox>

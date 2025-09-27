@@ -82,6 +82,7 @@ const ChatBot = ({ onClose }: ChatBotProps) => {
         borderColor="glass.border"
         boxShadow="cosmic"
         overflow="hidden"
+        zIndex={9999}
       >
         {/* Header */}
         <HStack
@@ -245,7 +246,7 @@ const ChatBot = ({ onClose }: ChatBotProps) => {
           borderTop="1px solid"
           borderColor="glass.border"
         >
-          <Box position="relative">
+          <HStack gap={2}>
             <Input
               placeholder="Ask me anything..."
               value={input}
@@ -261,28 +262,27 @@ const ChatBot = ({ onClose }: ChatBotProps) => {
                 borderColor: 'brand.orange',
                 boxShadow: '0 0 0 1px var(--colors-brand-orange)'
               }}
-              pr="4.5rem"
+              flex={1}
             />
-            <Box width="4.5rem" h="full">
-              <Button
-                h="2.5rem"
-                size="sm"
-                bg="linear-gradient(135deg, #FF9F4A 0%, #F39C12 100%)"
-                color="white"
-                onClick={handleSend}
-                loading={loading}
-                disabled={!input.trim() || loading}
-                _hover={{ 
-                  transform: 'scale(1.05)',
-                  boxShadow: 'nebula' 
-                }}
-                _active={{ transform: 'scale(0.95)' }}
-                borderRadius="lg"
-              >
-                <Icon as={FaPaperPlane} />
-              </Button>
-            </Box>
-          </Box>
+            <Button
+              size="sm"
+              bg="linear-gradient(135deg, #FF9F4A 0%, #F39C12 100%)"
+              color="white"
+              onClick={handleSend}
+              loading={loading}
+              disabled={!input.trim() || loading}
+              _hover={{ 
+                transform: 'scale(1.05)',
+                boxShadow: 'nebula' 
+              }}
+              _active={{ transform: 'scale(0.95)' }}
+              borderRadius="lg"
+              h="40px"
+              w="40px"
+            >
+              <Icon as={FaPaperPlane} />
+            </Button>
+                    </HStack>
         </Box>
       </MotionBox>
     </AnimatePresence>

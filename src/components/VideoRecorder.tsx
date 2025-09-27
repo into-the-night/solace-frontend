@@ -380,7 +380,7 @@ const VideoRecorder = ({ onClose }: VideoRecorderProps) => {
                 transform: 'translateY(-2px)'
               }}
             >
-              Upload to the Cosmos
+              Upload Video
             </Button>
           </MotionBox>
         )}
