@@ -1,12 +1,16 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import type { ChangeEvent } from 'react'
-import { Box, Button, VStack, HStack, Text } from '@chakra-ui/react'
+import { Box, Button, VStack, HStack, Text, Icon, Select } from '@chakra-ui/react'
+import { FaVideo, FaTimes, FaCamera } from 'react-icons/fa'
+import { motion } from 'framer-motion'
 import Webcam from 'react-webcam'
 import axios from 'axios'
 
 interface VideoRecorderProps {
   onClose: () => void
 }
+
+const MotionBox = motion(Box)
 
 const VideoRecorder = ({ onClose }: VideoRecorderProps) => {
   const webcamRef = useRef<Webcam>(null)
@@ -34,11 +38,8 @@ const VideoRecorder = ({ onClose }: VideoRecorderProps) => {
     // Request camera permissions and enumerate devices
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        // After permission is granted, enumerate devices to get labels
+      .then(() => {
         navigator.mediaDevices.enumerateDevices().then(handleDevices)
-        // Stop all tracks to release camera after enumeration
-        stream.getTracks().forEach(track => track.stop())
       })
       .catch((err) => {
         console.error('Error accessing media devices:', err)
@@ -135,109 +136,256 @@ const VideoRecorder = ({ onClose }: VideoRecorderProps) => {
   }
 
   return (
-    <VStack gap={4} bg="white" p={6} borderRadius="xl" w="full">
-      {/* Camera selection dropdown */}
-      {devices.length > 0 && (
-        <Box w="full">
-          <Text fontSize="sm" mb={2}>Select Camera:</Text>
-          <select
-            value={selectedDeviceId}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedDeviceId(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '8px',
-              borderRadius: '6px',
-              border: '1px solid #E2E8F0',
-              backgroundColor: 'white',
-              fontSize: '14px'
-            }}
+    <MotionBox
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      bg="glass.white"
+      backdropFilter="blur(20px)"
+      p={6}
+      borderRadius="2xl"
+      w="full"
+      border="1px solid"
+      borderColor="glass.border"
+      boxShadow="cosmic"
+    >
+      <VStack gap={5} w="full">
+        {/* Header */}
+        <HStack justify="space-between" w="full">
+          <HStack gap={3}>
+            <Box
+              p={2}
+              borderRadius="lg"
+              bg="linear-gradient(135deg, #FF9F4A 0%, #F39C12 100%)"
+              color="white"
+            >
+              <Icon as={FaVideo} boxSize={5} />
+            </Box>
+            <Text 
+              fontSize="xl" 
+              fontWeight="bold" 
+              color="white"
+              fontFamily="fonts.heading"
+            >
+              Record Your Cosmic Journey
+            </Text>
+          </HStack>
+          <Button
+            size="sm"
+            variant="ghost"
+            color="whiteAlpha.700"
+            onClick={onClose}
+            _hover={{ bg: 'whiteAlpha.200' }}
+            borderRadius="lg"
           >
-            <option value="">Select Camera</option>
-            {devices.map((device) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label || `Camera ${device.deviceId.substring(0, 8)}...`}
-              </option>
-            ))}
-          </select>
-        </Box>
-      )}
+            <Icon as={FaTimes} />
+          </Button>
+        </HStack>
 
-      {/* Error message */}
-      {error && (
-        <Box
-          w="full"
-          p={3}
-          bg="red.50"
-          borderRadius="md"
-          borderWidth={1}
-          borderColor="red.200"
-        >
-          <Text color="red.600" fontSize="sm">
-            ⚠️ {error}
-          </Text>
-        </Box>
-      )}
-
-      <Box w="full" h="400px" bg="gray.900" borderRadius="lg" overflow="hidden" position="relative">
-        <Webcam
-          audio={true}
-          ref={webcamRef}
-          width="100%"
-          height="100%"
-          videoConstraints={videoConstraints}
-          onUserMedia={handleUserMedia}
-          onUserMediaError={handleUserMediaError}
-        />
-        {!cameraReady && !error && (
-          <Box
-            position="absolute"
-            top="50%"
-            left="50%"
-            transform="translate(-50%, -50%)"
-            color="white"
-            fontSize="lg"
-          >
-            <Text>Loading camera...</Text>
+        {/* Camera selection dropdown */}
+        {devices.length > 0 && (
+          <Box w="full">
+            <HStack mb={2}>
+              <Icon as={FaCamera} color="whiteAlpha.700" boxSize={4} />
+              <Text fontSize="sm" color="whiteAlpha.800" fontWeight="500">
+                Camera Source
+              </Text>
+            </HStack>
+            <select
+              value={selectedDeviceId}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedDeviceId(e.target.value)}
+            >
+              <option value="">Select Camera</option>
+              {devices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label || `Camera ${device.deviceId.substring(0, 8)}...`}
+                </option>
+              ))}
+            </select>
           </Box>
         )}
-      </Box>
-      
-      <HStack gap={4} w="full">
-        {!recording ? (
-          <>
-            <Button
-              colorScheme="red"
-              onClick={handleStartRecording}
-              flex={1}
-              disabled={!cameraReady}
+
+        {/* Error message */}
+        {error && (
+          <MotionBox
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            w="full"
+            p={3}
+            bg="rgba(231, 76, 60, 0.1)"
+            borderRadius="lg"
+            border="1px solid"
+            borderColor="rgba(231, 76, 60, 0.3)"
+            backdropFilter="blur(10px)"
+          >
+            <Text color="brand.nebula" fontSize="sm">
+              ⚠️ {error}
+            </Text>
+          </MotionBox>
+        )}
+
+        <Box 
+          w="full" 
+          h="400px" 
+          bg="space.deep" 
+          borderRadius="xl" 
+          overflow="hidden" 
+          position="relative"
+          border="1px solid"
+          borderColor="glass.border"
+          boxShadow="inset 0 0 20px rgba(0, 0, 0, 0.5)"
+        >
+          <Webcam
+            audio={true}
+            ref={webcamRef}
+            width="100%"
+            height="100%"
+            videoConstraints={videoConstraints}
+            onUserMedia={handleUserMedia}
+            onUserMediaError={handleUserMediaError}
+          />
+          
+          {/* Recording indicator */}
+          {recording && (
+            <MotionBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              position="absolute"
+              top={4}
+              left={4}
+              bg="rgba(231, 76, 60, 0.9)"
+              color="white"
+              px={3}
+              py={2}
+              borderRadius="full"
+              display="flex"
+              alignItems="center"
+              gap={2}
             >
-              Start Recording
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </>
-        ) : (
-          <>
+              <Box
+                w={2}
+                h={2}
+                bg="white"
+                borderRadius="full"
+                animation="pulse 1s infinite"
+              />
+              <Text fontSize="sm" fontWeight="600">REC</Text>
+            </MotionBox>
+          )}
+          
+          {!cameraReady && !error && (
+            <Box
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              textAlign="center"
+            >
+              <VStack gap={3}>
+                <Box
+                  w={16}
+                  h={16}
+                  borderRadius="full"
+                  border="3px solid"
+                  borderColor="brand.orange"
+                  borderTopColor="transparent"
+                  animation="spin 1s linear infinite"
+                />
+                <Text color="whiteAlpha.800" fontSize="lg">
+                  Initializing cosmic camera...
+                </Text>
+              </VStack>
+            </Box>
+          )}
+        </Box>
+      
+        <HStack gap={4} w="full">
+          {!recording ? (
+            <>
+              <Button
+                as={motion.button}
+                bg="linear-gradient(135deg, #E74C3C 0%, #C0392B 100%)"
+                color="white"
+                size="lg"
+                onClick={handleStartRecording}
+                flex={1}
+                disabled={!cameraReady}
+                fontFamily="fonts.heading"
+                fontWeight="600"
+                _hover={{
+                  boxShadow: 'nebula',
+                  transform: 'translateY(-2px)'
+                }}
+                _disabled={{
+                  opacity: 0.5,
+                  cursor: 'not-allowed'
+                }}
+              >
+                Start Recording
+              </Button>
+              <Button
+                variant="outline"
+                color="whiteAlpha.800"
+                borderColor="glass.border"
+                onClick={onClose}
+                _hover={{
+                  bg: 'whiteAlpha.100',
+                  borderColor: 'whiteAlpha.400'
+                }}
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
             <Button
-              colorScheme="gray"
+              as={motion.button}
+              bg="glass.white"
+              backdropFilter="blur(10px)"
+              color="white"
+              border="1px solid"
+              borderColor="glass.border"
+              size="lg"
               onClick={handleStopRecording}
               flex={1}
+              fontFamily="fonts.heading"
+              fontWeight="600"
+              _hover={{
+                bg: 'whiteAlpha.200',
+                borderColor: 'whiteAlpha.400'
+              }}
             >
               Stop Recording
             </Button>
-          </>
-        )}
-      </HStack>
+          )}
+        </HStack>
 
-      {recordedChunks.length > 0 && !recording && (
-        <Button
-          colorScheme="green"
-          onClick={handleUpload}
-          w="full"
-        >
-          Upload Video
-        </Button>
-      )}
-    </VStack>
+        {recordedChunks.length > 0 && !recording && (
+          <MotionBox
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            w="full"
+          >
+            <Button
+              as={motion.button}
+              bg="linear-gradient(135deg, #9B59B6 0%, #3498DB 100%)"
+              color="white"
+              size="lg"
+              onClick={handleUpload}
+              w="full"
+              fontFamily="fonts.heading"
+              fontWeight="600"
+              boxShadow="aurora"
+              _hover={{
+                boxShadow: '0 0 30px rgba(155, 89, 182, 0.6)',
+                transform: 'translateY(-2px)'
+              }}
+            >
+              Upload to the Cosmos
+            </Button>
+          </MotionBox>
+        )}
+      </VStack>
+    </MotionBox>
   )
 }
 
