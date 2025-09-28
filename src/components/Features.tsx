@@ -1,7 +1,6 @@
 import { VStack, Button, Text, Box, HStack, Icon } from '@chakra-ui/react'
 import { useState } from 'react'
-import { FaVideo, FaRobot } from 'react-icons/fa'
-import { GiMeditation } from "react-icons/gi";
+import { FaRobot } from 'react-icons/fa'
 import VideoRecorder from '../components/VideoRecorder'
 
 interface FeaturesProps {
