@@ -21,10 +21,10 @@ const Calendar = () => {
         p={4}
         borderRadius="xl"
         mb={4}
-        spacing={2}
+        gap={2}
       >
         <FaFire size={24} />
-        <VStack align="start" spacing={0}>
+        <VStack align="start" gap={0}>
           <Text fontWeight="bold" fontSize="lg">
             {completedDays} days streak!
           </Text>
@@ -35,7 +35,7 @@ const Calendar = () => {
       {/* Calendar Days */}
       <HStack justify="space-between" px={4}>
         {days.map((day, index) => (
-          <VStack key={day} spacing={2}>
+          <VStack key={day} gap={2}>
             <Text color="gray.500" fontSize="sm">
               {day}
             </Text>
