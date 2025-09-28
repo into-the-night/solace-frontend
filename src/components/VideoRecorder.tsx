@@ -34,8 +34,11 @@ const VideoRecorder = ({ onClose }: VideoRecorderProps) => {
     // Request camera permissions and enumerate devices
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
-      .then(() => {
+      .then((stream) => {
+        // After permission is granted, enumerate devices to get labels
         navigator.mediaDevices.enumerateDevices().then(handleDevices)
+        // Stop all tracks to release camera after enumeration
+        stream.getTracks().forEach(track => track.stop())
       })
       .catch((err) => {
         console.error('Error accessing media devices:', err)
