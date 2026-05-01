@@ -1,7 +1,6 @@
 import { VStack, Button, Text, Box, HStack, Icon } from '@chakra-ui/react'
 import { useState } from 'react'
 import { FaVideo, FaRobot, FaArrowRight } from 'react-icons/fa'
-import { GiMeditation } from "react-icons/gi"
 import { HiSparkles } from 'react-icons/hi'
 import { motion } from 'framer-motion'
 import VideoRecorder from '../components/VideoRecorder'
@@ -23,18 +22,6 @@ const Features = ({ onChatClick }: FeaturesProps) => {
       transition: {
         staggerChildren: 0.1,
         delayChildren: 0.3
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
       }
     }
   }

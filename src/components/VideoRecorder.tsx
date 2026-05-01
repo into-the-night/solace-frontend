@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import type { ChangeEvent } from 'react'
-import { Box, Button, VStack, HStack, Text, Icon, Select } from '@chakra-ui/react'
+import { Box, Button, VStack, HStack, Text, Icon } from '@chakra-ui/react'
 import { FaVideo, FaTimes, FaCamera } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import Webcam from 'react-webcam'
